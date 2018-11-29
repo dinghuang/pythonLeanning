@@ -1,0 +1,4 @@
+*.py linguist-language=python
+*.txt linguist-language=python
+*.ttf linguist-language=python
+*.png linguist-language=python
