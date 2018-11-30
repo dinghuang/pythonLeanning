@@ -12,7 +12,8 @@ from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from bs4 import BeautifulSoup
 import json
 import re
-
+from collections import Counter
+import jieba
 
 def fetch_choerodon_io_comments():
     home_path = 'http:/forum.choerodon.io/'
@@ -80,7 +81,25 @@ def extract_words():
     # plt.imshow(alice_coloring, cmap=plt.cm.gray, interpolation="bilinear")
     # plt.axis("off")
     # plt.show()
+def get_words():
+    commentlist = []
+    with open('subjects.txt', 'r', encoding='utf-8') as f:
+        txt = f.read()
+        seg_list = pseg.cut(txt)
+        stop_words = set(line.strip() for line in open('stopwords.txt', encoding='utf-8'))
+        for word, flag in seg_list:
+            if not word in stop_words:
+                commentlist.append(word)
+        c = Counter()
+        for x in commentlist:
+            if len(x)>1 and x != '\r\n':
+                c[x] += 1
+        print('常用词频度统计结果')
+        for (k,v) in c.most_common(100):
+            # print(str(k)+"*****"+str(v))
+            print('%s %s  %d' % ( k, '**********', v))
 
 if __name__ == "__main__":
-    fetch_choerodon_io_comments()
-    extract_words()
+    # fetch_choerodon_io_comments()
+    # extract_words()
+    get_words()
